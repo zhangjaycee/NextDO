@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import PrintFmt
+import json
 from datetime import datetime
 
 DEBUG = 0
@@ -75,7 +76,7 @@ class Status:
         if view_name is None:
             view_name = 'Others'
         if view_name not in self.views:
-            create_new_view(view_name)
+            self.create_new_view(view_name)
         color = self.views[view_name].color
         i = Item(content_str, color, view_name)
         self.items.append(i)
@@ -86,8 +87,15 @@ class Status:
             self.views[view_name].echo()
         
 
-    def create_new_view(self, view_name):
-        v = View(view_name, self.__unique_color())
+    def create_new_view(self, view_name, color = None):
+        if color is None:
+            color = self.__unique_color()
+        else:
+            if color not in self.exists_colors:
+                self.exists_colors[color] = 1
+            else:
+                self.exists_colors[color] += 1
+        v = View(view_name, color)
         self.views[v.name] = v 
 
         if DEBUG:
@@ -102,10 +110,10 @@ class Status:
                 self.exists_colors[i] = 1
                 return i
         min_color = PrintFmt.RED
-        min_count = exists_colors[PrintFmt.RED] 
+        min_count = self.exists_colors[PrintFmt.RED] 
         for i in PrintFmt.COLORS:
-            if exists_colors[i] < min_count:
-                min_count = exists_colors[i]
+            if self.exists_colors[i] < min_count:
+                min_count = self.exists_colors[i]
                 min_color = i
         self.exists_colors[min_color] += 1
         return min_color
@@ -126,6 +134,7 @@ class Status:
 
     def load(self):
         with open(self.name + '.data') as json_file:
+            count = 0
             for line in json_file:
                 i = json.loads(line)
                 t = Item(i['content'])
@@ -135,4 +144,8 @@ class Status:
                 t.color = i['color']
                 t.detail = i['detail']
                 self.items.append(t)
+                if t.view_name not in self.views:
+                    self.create_new_view(t.view_name, t.color)
                 self.views[t.view_name].add(t)
+                count += 1
+        return count

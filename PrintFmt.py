@@ -2,7 +2,6 @@
 # coding: utf-8
 
 
-from structs import Item
 
 # define color
 RED = "31"
