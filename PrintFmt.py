@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # coding: utf-8
 
+
+from structs import Item
+
 # define color
 RED = "31"
 GREEN = "32"
@@ -26,18 +29,18 @@ BG_COLORS = [BG_RED, BG_GREEN, BG_YELLOW, BG_BLUE, BG_PINK, BG_CYAN]
 ALL_COLORS = COLORS + BG_COLORS
 
 
-def printc(color, my_str, my_str2):
-    color_str = "\033[" + color + "m" + my_str + my_str2 + "\033[0m"
+def printc(color, my_str):
+    color_str = "\033[" + color + "m" + my_str + "\033[0m"
     print color_str
 
 
 
 def test():
     print COLORS
-    for color in FG_COLORS:
-        printc(color, "hello, ","world!")
+    for color in COLORS:
+        printc(color, "hello, world!")
     for color in BG_COLORS:
-        printc(color, "hello, ","world!")
+        printc(color, "hello, world!")
 
 if __name__ == "__main__":
     test()

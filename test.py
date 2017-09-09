@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # coding: utf-8
 
-from item import Item
+from structs import Item
+from structs import View
 import PrintFmt
 import json
 import time
