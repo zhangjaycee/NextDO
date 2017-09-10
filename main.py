@@ -21,8 +21,8 @@ d(i)    delete an item
 dv      deltee a view
 c       bind an item to a view       
 u       unbund and item from a view
-ld      load corresponding plan table 
-s(v)    save current plan table
+s(ave) 	save current plan table
+load    load corresponding plan table 
 
 q(uit)	exit
 help	this menu
@@ -52,8 +52,8 @@ class CmdNextdo(Cmd):
 	def do_p(self, strarg = None):
 		self.do_pi()  
 	def do_pi(self, strarg = None):
-		for i in self.s.items:
-			i.echo()
+		for i in range(len(self.s.items)):
+			self.s.items[i].echo("%d." % (i+1))
 	def do_pv(self, strarg = None):
 		for i in self.s.views:
 			self.s.views[i].echo()
@@ -70,16 +70,40 @@ class CmdNextdo(Cmd):
 		self.s.create_new_view(strarg)
 
 	# deletes
+	def do_d(self, strarg = None):
+		self.do_di()  
+	def do_di(self, strarg = None):
+		self.do_pi()
+		n = int(raw_input("Which item U want to delete? Plz input a number: "))
+		if not (n > 0 and n <= len(self.s.items)):
+			print "delete failed, try again..."
+			return
+		self.s.delete_item(self.s.items[n-1])
+	def do_dv(self, strarg = None):
+		self.do_pv()
+		name = raw_input("Which view U want to delete? Plz input its name: ")
+		if name not in self.s.views:
+			print "delete failed, try again..."
+			return
+		self.s.delete_view(self.s.views[name])
+	
 
 	# bind & unbind
 
 	# save & load
+	def do_s(self, strarg = None):
+		self.do_save()
+	def do_save(self, strarg = None):
+		self.s.save()
+	def do_load(self, strarg = None):
+		self.s.load()
+		
 	
 	# exits
 	def do_q(self, strarg = None): 
-		do_exit()
+		self.do_exit()
 	def do_quit(self, strarg = None): 
-		do_exit()
+		self.do_exit()
 	def do_exit(self, strarg = None):
 		print 'Bye!'
 		sys.exit()  

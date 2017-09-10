@@ -28,8 +28,8 @@ class Item:
     #print & format: color
     def change_color(self, color):
         self.color = color
-    def echo(self):
-        echo_str = "%-20s\t%-20s\t%-20s" % (self.content, self.create_time.strftime('%Y-%m-%d %H:%M'), self.view_name)
+    def echo(self, prefix = ''):
+        echo_str = "% 3s %-20s\t%-20s\t%-20s" % (prefix, self.content, self.create_time.strftime('%Y-%m-%d %H:%M'), self.view_name)
         PrintFmt.printc(self.color, echo_str)
 
 
@@ -48,11 +48,9 @@ class View:
         self.list = []
 
 
-    def add(self, item):
-        self.list.append(item)
+    def add(self, view):
+        self.list.append(view)
 
-#    def delete(self, item):
-#        del self.list.remove(item)
 
     def echo(self):
         prefix_str = '*' * 78
@@ -85,6 +83,10 @@ class Status:
         if DEBUG:
             self.items[-1].echo()
             self.views[view_name].echo()
+
+    def delete_item(self, item):
+        self.views[item.view_name].list.remove(item)
+        self.items.remove(item)
         
 
     def create_new_view(self, view_name, color = None):
@@ -101,6 +103,11 @@ class Status:
         if DEBUG:
             print self.views
          
+    def delete_view(self, view):
+        print  "to del view:", view.name
+        for item in view.list:
+            item.view_name = 'Others'
+        del self.views[view.name]
         
     def __unique_color(self):
         for i in PrintFmt.COLORS:
