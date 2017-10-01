@@ -12,5 +12,9 @@ It is just a Python program, and it will generate a json formatted file for pers
 
 ## (it is now under developing....)
 now avaliable functions:
-* Basic operations (create, check, delete items and views)
+* Basic operations (create, check, delete items and views, bind / unbinding an item from a view)
 * Data persistence (save to or load from a JSON format file)
+
+todolist:
+* persistent data use sqlite
+* better CLI(new style of colors)
